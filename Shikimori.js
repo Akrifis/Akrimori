@@ -1,23 +1,26 @@
 class ShikimoriAuth {
     constructor() {
-        this.clientId = 'ваш_client_id'; // Зарегистрируйте приложение на shikimori.one/oauth
+        this.clientId = 'ваш_client_id'; // Замените на реальный
         this.redirectUri = encodeURIComponent(window.location.origin);
         this.token = localStorage.getItem('shiki_token');
-        this.userData = JSON.parse(localStorage.getItem('shiki_user') || null;
+        this.userData = JSON.parse(localStorage.getItem('shiki_user')) || null;
         
         this.init();
     }
     
     init() {
+        // Обработка OAuth редиректа
         if (window.location.search.includes('code=')) {
             this.handleRedirect();
         }
         
-        if (this.token) {
+        // Показать профиль если авторизованы
+        if (this.token && this.userData) {
             this.showProfile();
         }
         
-        document.getElementById('shiki-connect').addEventListener('click', this.authorize.bind(this));
+        // Кнопка авторизации
+        document.getElementById('shiki-connect')?.addEventListener('click', () => this.authorize());
     }
     
     authorize() {
@@ -44,7 +47,11 @@ class ShikimoriAuth {
             
             window.history.replaceState({}, document.title, window.location.pathname);
             this.showProfile();
-            this.loadAnimeData();
+            
+            // Если на странице аниме - загружаем данные
+            if (document.getElementById('anime-page').classList.contains('active-page')) {
+                this.loadAnimeData('watching');
+            }
         } catch (error) {
             console.error('Auth error:', error);
         }
@@ -59,7 +66,7 @@ class ShikimoriAuth {
             body: JSON.stringify({
                 grant_type: 'authorization_code',
                 client_id: this.clientId,
-                client_secret: 'ваш_client_secret',
+                client_secret: 'ваш_client_secret', // Замените на реальный
                 code: code,
                 redirect_uri: decodeURIComponent(this.redirectUri)
             })
@@ -75,17 +82,21 @@ class ShikimoriAuth {
                 'Authorization': `Bearer ${this.token}`
             }
         });
-        
         return await response.json();
     }
     
     showProfile() {
-        document.getElementById('shiki-connect').style.display = 'none';
+        const connectBtn = document.getElementById('shiki-connect');
+        const mobileBtn = document.getElementById('mobile-shiki-btn');
         const profile = document.getElementById('shiki-profile');
-        profile.style.display = 'flex';
         
-        document.getElementById('shiki-avatar').src = `https://shikimori.one${this.userData.avatar}`;
-        document.getElementById('shiki-username').textContent = this.userData.nickname;
+        if (connectBtn) connectBtn.style.display = 'none';
+        if (mobileBtn) mobileBtn.style.display = 'none';
+        if (profile) {
+            profile.style.display = 'flex';
+            document.getElementById('shiki-avatar').src = `https://shikimori.one${this.userData.avatar}`;
+            document.getElementById('shiki-username').textContent = this.userData.nickname;
+        }
     }
     
     logout() {
@@ -111,27 +122,27 @@ class ShikimoriAuth {
     
     displayAnimeList(animeList) {
         const listElement = document.getElementById('anime-list');
-        listElement.innerHTML = '';
+        if (!listElement) return;
         
-        animeList.forEach(anime => {
-            const animeCard = document.createElement('div');
-            animeCard.className = 'anime-card';
-            animeCard.innerHTML = `
+        listElement.innerHTML = animeList.map(anime => `
+            <div class="anime-card" onclick="showAnimeDetails(${anime.anime.id})">
                 <img class="anime-poster" src="https://shikimori.one${anime.anime.image.preview}" alt="${anime.anime.russian || anime.anime.name}">
                 <div class="anime-info">
-                    <h3 class="anime-title">${anime.anime.russian || anime.anime.name}</h3>
-                    <div class="anime-meta">
-                        <span>${anime.episodes}/${anime.anime.episodes || '?'} эп.</span>
-                        <span>${anime.score ? '★'.repeat(anime.score) : '—'}</span>
-                    </div>
+                    <h3>${anime.anime.russian || anime.anime.name}</h3>
+                    <p>${anime.episodes}/${anime.anime.episodes || '?'} эп.</p>
+                    <div class="rating">${anime.score ? '★'.repeat(anime.score) : 'Без оценки'}</div>
                 </div>
-            `;
-            listElement.appendChild(animeCard);
-        });
+            </div>
+        `).join('');
     }
 }
 
-// Инициализация при загрузке страницы
+// Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', () => {
-    new ShikimoriAuth();
+    window.shikimoriAuth = new ShikimoriAuth();
 });
+
+// Глобальная функция для показа деталей аниме
+window.showAnimeDetails = function(id) {
+    alert(`Открываем страницу аниме с ID: ${id}\nВ реальном приложении будет переход на детальную страницу`);
+};
