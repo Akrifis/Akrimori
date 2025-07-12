@@ -3,68 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnimeHub - Сообщество любителей аниме</title>
+    <title>AnimeFan | Ваше аниме-сообщество</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Шапка сайта -->
     <header class="header">
         <div class="container">
-            <div class="logo">
+            <div class="logo" onclick="navigate('home')">
                 <i class="fas fa-dragon"></i>
-                <span>AnimeHub</span>
+                <span>AnimeFan</span>
             </div>
             <nav class="nav">
-                <a href="#" class="active"><i class="fas fa-home"></i> Главная</a>
-                <a href="#"><i class="fas fa-users"></i> Сообщество</a>
-                <a href="#"><i class="fas fa-calendar"></i> Расписание</a>
+                <a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Главная</a>
+                <a href="#" class="nav-link" data-page="anime"><i class="fas fa-tv"></i> Аниме</a>
+                <a href="#" class="nav-link" data-page="community"><i class="fas fa-users"></i> Сообщество</a>
                 <div class="shiki-auth">
-                    <button id="shiki-connect"><i class="fas fa-plug"></i> Привязать Shikimori</button>
+                    <button id="shiki-connect" class="shiki-btn"><i class="fas fa-plug"></i> Войти через Shikimori</button>
                     <div id="shiki-profile" style="display:none">
-                        <img id="shiki-avatar" src="" alt="Avatar">
+                        <img id="shiki-avatar" src="" alt="Avatar" class="profile-avatar">
                         <span id="shiki-username"></span>
                     </div>
                 </div>
             </nav>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <main class="container">
-        <section class="hero">
-            <h1>Добро пожаловать в AnimeHub</h1>
-            <p>Ваше сообщество любителей аниме с интеграцией Shikimori</p>
-        </section>
+    <!-- Мобильное меню -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#" class="mobile-link" data-page="home"><i class="fas fa-home"></i> Главная</a>
+        <a href="#" class="mobile-link" data-page="anime"><i class="fas fa-tv"></i> Аниме</a>
+        <a href="#" class="mobile-link" data-page="community"><i class="fas fa-users"></i> Сообщество</a>
+        <button id="mobile-shiki-btn" class="shiki-btn"><i class="fas fa-plug"></i> Shikimori</button>
+    </div>
 
-        <section class="shiki-section">
-            <h2><i class="fas fa-user-circle"></i> Ваш Shikimori профиль</h2>
-            <div id="shiki-data" class="shiki-data">
-                <p>Подключите свой аккаунт Shikimori, чтобы увидеть статистику</p>
+    <!-- Основное содержимое -->
+    <main class="container">
+        <!-- Домашняя страница -->
+        <section id="home-page" class="page active-page">
+            <div class="hero">
+                <h1>Добро пожаловать в AnimeFan</h1>
+                <p>Ваше сообщество любителей аниме с интеграцией Shikimori</p>
+                <button class="cta-button" onclick="navigate('anime')">
+                    <i class="fas fa-arrow-right"></i> Перейти к аниме
+                </button>
             </div>
         </section>
 
-        <section class="anime-lists">
+        <!-- Страница аниме -->
+        <section id="anime-page" class="page">
+            <h2><i class="fas fa-tv"></i> Ваши аниме-листы</h2>
             <div class="tab-buttons">
-                <button class="tab-btn active" data-list="watching"><i class="fas fa-play"></i> Смотрю</button>
-                <button class="tab-btn" data-list="completed"><i class="fas fa-check"></i> Просмотрено</button>
-                <button class="tab-btn" data-list="planned"><i class="fas fa-bookmark"></i> В планах</button>
+                <button class="tab-btn active" data-status="watching" onclick="changeTab('watching')">
+                    <i class="fas fa-play"></i> Смотрю
+                </button>
+                <button class="tab-btn" data-status="completed" onclick="changeTab('completed')">
+                    <i class="fas fa-check"></i> Просмотрено
+                </button>
+                <button class="tab-btn" data-status="planned" onclick="changeTab('planned')">
+                    <i class="fas fa-bookmark"></i> В планах
+                </button>
             </div>
             <div id="anime-list" class="anime-grid"></div>
         </section>
 
-        <section class="community">
-            <h2><i class="fas fa-comments"></i> Обсуждения</h2>
+        <!-- Сообщество -->
+        <section id="community-page" class="page">
+            <h2><i class="fas fa-users"></i> Наше сообщество</h2>
             <div class="forum-preview">
-                <!-- Будет заполняться через JS -->
+                <div class="forum-card" onclick="showTopic(1)">
+                    <h3>Обсуждаем новый сезон</h3>
+                    <p>25 сообщений</p>
+                </div>
+                <div class="forum-card" onclick="showTopic(2)">
+                    <h3>Рекомендации для новичков</h3>
+                    <p>42 сообщения</p>
+                </div>
             </div>
         </section>
     </main>
 
+    <!-- Подвал -->
     <footer>
         <div class="container">
-            <p>© 2023 AnimeHub | Использует Shikimori API</p>
+            <p>© 2023 AnimeFan | Использует Shikimori API</p>
+            <button class="footer-btn" onclick="scrollToTop()">
+                <i class="fas fa-arrow-up"></i> Наверх
+            </button>
         </div>
     </footer>
 
+    <!-- Подключаем скрипты -->
     <script src="js/shikimori.js"></script>
     <script src="js/app.js"></script>
 </body>
