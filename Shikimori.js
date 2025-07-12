@@ -1,6 +1,6 @@
 class ShikimoriAuth {
     constructor() {
-        this.clientId = 'ваш_client_id'; // Замените на реальный
+        this.clientId = '3VfZbO9bAafSn-V6DD28neLh8GQlnL7pbx8qcYyTQqY'; // Замените на реальный
         this.redirectUri = encodeURIComponent(window.location.origin);
         this.token = localStorage.getItem('shiki_token');
         this.userData = JSON.parse(localStorage.getItem('shiki_user')) || null;
@@ -66,7 +66,7 @@ class ShikimoriAuth {
             body: JSON.stringify({
                 grant_type: 'authorization_code',
                 client_id: this.clientId,
-                client_secret: 'ваш_client_secret', // Замените на реальный
+                client_secret: 'cZDMvRC1pNtlNAlVyIfZjFl4PWcoxbvBePmMmQW86wQ', // Замените на реальный
                 code: code,
                 redirect_uri: decodeURIComponent(this.redirectUri)
             })
