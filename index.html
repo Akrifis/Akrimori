@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeHub - Сообщество любителей аниме</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                <span>AnimeHub</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="active"><i class="fas fa-home"></i> Главная</a>
+                <a href="#"><i class="fas fa-users"></i> Сообщество</a>
+                <a href="#"><i class="fas fa-calendar"></i> Расписание</a>
+                <div class="shiki-auth">
+                    <button id="shiki-connect"><i class="fas fa-plug"></i> Привязать Shikimori</button>
+                    <div id="shiki-profile" style="display:none">
+                        <img id="shiki-avatar" src="" alt="Avatar">
+                        <span id="shiki-username"></span>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Добро пожаловать в AnimeHub</h1>
+            <p>Ваше сообщество любителей аниме с интеграцией Shikimori</p>
+        </section>
+
+        <section class="shiki-section">
+            <h2><i class="fas fa-user-circle"></i> Ваш Shikimori профиль</h2>
+            <div id="shiki-data" class="shiki-data">
+                <p>Подключите свой аккаунт Shikimori, чтобы увидеть статистику</p>
+            </div>
+        </section>
+
+        <section class="anime-lists">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-list="watching"><i class="fas fa-play"></i> Смотрю</button>
+                <button class="tab-btn" data-list="completed"><i class="fas fa-check"></i> Просмотрено</button>
+                <button class="tab-btn" data-list="planned"><i class="fas fa-bookmark"></i> В планах</button>
+            </div>
+            <div id="anime-list" class="anime-grid"></div>
+        </section>
+
+        <section class="community">
+            <h2><i class="fas fa-comments"></i> Обсуждения</h2>
+            <div class="forum-preview">
+                <!-- Будет заполняться через JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 AnimeHub | Использует Shikimori API</p>
+        </div>
+    </footer>
+
+    <script src="js/shikimori.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
